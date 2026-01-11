@@ -1,11 +1,14 @@
 from flask import Flask
 
+app = Flask(__name__)
 
+@app.route("/")
+def landing():
+    return "Server is up and running"
 
-def main():
-    app = Flask(__name__)
-    print("Hello from server!")
 
 
 if __name__ == "__main__":
-    main()
+    app.run()
+    print("Closing Server")
+

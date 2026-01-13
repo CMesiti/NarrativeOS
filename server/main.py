@@ -23,7 +23,19 @@ def get_users():
         except:
             print("Query ERROR")
     
-    return str(result)
+    return str(result.fetchall())
+
+@app.route("/campaigns")
+def get_campaigns():
+    results = "None"
+    try:
+        with db.begin() as connection:
+            results = connection.execute(text("SELECT * FROM campaigns"))
+            print("Successful Query!")
+    except:
+        print("Query Error")
+    return str(results.fetchall())
+
 
 
 if __name__ == "__main__":

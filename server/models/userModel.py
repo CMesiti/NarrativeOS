@@ -5,3 +5,10 @@ from typing import List, Optional
 class Base(DeclarativeBase):
     pass
 
+class Users(Base):
+    __tablename__ = "users"
+
+class Campaigns(Base):
+    __tablename__ = "campaigns"
+
+    

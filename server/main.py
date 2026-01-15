@@ -1,10 +1,14 @@
 from flask import Flask
 from config.db import get_connection
 from sqlalchemy import text
+from sqlalchemy.orm import Session
+from models import Users, Campaigns
 
 # Refactor this into an app factory
 # Add SQLAlchemy sessions properly
 # Structure Campaign Forge for scaling (routes / blueprints)
+
+# CORE vs ORM, The ORM uses sessions and Core uses a straight connection to the DBAPI
 app = Flask(__name__)
 db = get_connection()
 
@@ -36,9 +40,25 @@ def get_campaigns():
         print("Query Error")
     return str(results.fetchall())
 
+@app.route("/users", methods=["POST"])
+def add_user():
+    result = "None"
+    try:
+        newUser = Users()
+        newUser.email = "example@example.com"
+        newUser.display_name = "tester"
+        newUser.pass_hash = "mypass123"
+        with Session(db) as session:
+            session.add(newUser)
+            session.commit()
+        result = "Query Successful"
+    except:
+        result = "Insert Query Error"
+    return result
+        
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-    print("Closing Server")
+
 

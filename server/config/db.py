@@ -6,6 +6,7 @@ from models import ModelBase
 #This may need changes later, every connection request calls create_all()
 load_dotenv()
 def get_connection():
+    print("Creating Database Connection and Register Models")
     URL = os.getenv("DATABASE_URL")
     engine = create_engine(URL)
     ModelBase.metadata.create_all(engine)

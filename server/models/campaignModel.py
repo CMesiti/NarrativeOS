@@ -24,3 +24,5 @@ class Campaigns(ModelBase):
             Title - {self.title}
             Description - {self.description}
             Created_By - {self.created_by}\n"""
+    
+    

@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from config.db import get_connection
 from sqlalchemy import text, select
 from sqlalchemy.orm import Session
@@ -54,8 +54,6 @@ def get_users():
         result = "Get Query Error"
     return result
 
-
-
 @app.route("/users", methods=["POST"])
 def add_user():
     result = "None"
@@ -71,7 +69,31 @@ def add_user():
     except:
         result = "Insert Query Error"
     return result
-        
+
+
+
+@app.route("/users", methods = ["PUT"])
+def update_user():
+    pass   
+
+
+
+@app.route("/users", methods=["DELETE"])
+def remove_user():
+    pass
+
+#Lets try a different method. This endpoint will group operations together, 
+@app.route("/campaigns", methods=["GET", "POST", "PUT", "DELETE"])
+def campaign_dashboard():
+    if request.method == "GET":
+        pass
+    elif request.method == "POST":
+        pass
+    elif request.method == "PUT":
+        pass
+    else:
+        pass
+
 
 
 if __name__ == "__main__":

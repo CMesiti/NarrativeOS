@@ -23,7 +23,7 @@ class Users(ModelBase):
         return f"""USER: 
         user_id - {self.user_id},
         email - {self.email},
-        display_name - {self.display_name}"""
+        display_name - {self.display_name}\n"""
     
 
 

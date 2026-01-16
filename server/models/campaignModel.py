@@ -23,4 +23,4 @@ class Campaigns(ModelBase):
             campaign_id - {self.campaign_id}
             Title - {self.title}
             Description - {self.description}
-            Created_By - {self.created_by}"""
+            Created_By - {self.created_by}\n"""

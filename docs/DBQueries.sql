@@ -23,16 +23,25 @@ CREATE TABLE IF NOT EXISTS campaigns(
 	create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Alterations
+ALTER TABLE campaigns
+DROP CONSTRAINT campaigns_created_by_fkey;
+
+ALTER TABLE campaigns 
+ADD CONSTRAINT campaigns_created_by_fkey FOREIGN KEY (created_by)
+REFERENCES users (user_id)
+ON DELETE CASCADE;
+
+-- Add Contraints to tables when needed
+ALTER TABLE users ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP;
+
+
+
+
 --Create Relationship tables
 
 
 
-
-
-
-
--- Add Contraints to tables when needed
--- ALTER TABLE users ALTER COLUMN created_at SET DEFAULT CURRENT_TIMESTAMP;
 
 
 -- Insert Mock data for testing purposes.

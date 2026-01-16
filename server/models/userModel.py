@@ -9,7 +9,7 @@ class Users(ModelBase):
     #table metadata
     __tablename__ = "users"
     #Python Dtypes = SQL Dtypes - Mapping
-    user_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key = True,server_default=text("get_random_uuid()")) 
+    user_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key = True, server_default=text("get_random_uuid()")) 
     #Mapped type hints, conversion python to database types
     email: Mapped[str] = mapped_column(VARCHAR(355), unique=True, nullable=False )
     pass_hash: Mapped[str] = mapped_column(VARCHAR(200), nullable=False)
@@ -17,7 +17,10 @@ class Users(ModelBase):
     created_at: Mapped[str] = mapped_column(server_default = func.current_timestamp())
 
     def __repr__(self)->str:
-        return f"USER: user_id - {self.user_id}, email - {self.email}, display_name - {self.display_name}"
+        return f"""USER: 
+        user_id - {self.user_id},
+        email - {self.email},
+        display_name - {self.display_name}"""
     
 
 

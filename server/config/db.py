@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 from models import ModelBase
 
+#This may need changes later, every connection request calls create_all()
 load_dotenv()
 def get_connection():
     URL = os.getenv("DATABASE_URL")

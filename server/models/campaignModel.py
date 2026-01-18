@@ -29,5 +29,11 @@ class Campaigns(ModelBase):
 
     
     
-def campaign_to_dict(campaign):
-    pass
+def campaign_to_dict(campaign:Campaigns)->dict:
+    return {
+        "campaign_id": campaign.campaign_id,
+        "title":campaign.title,
+        "description":campaign.description,
+        "created_at":campaign.created_at,
+        "created_by":campaign.created_by
+    }

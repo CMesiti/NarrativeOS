@@ -27,7 +27,7 @@ class Users(ModelBase):
     
 
 
-def user_to_dict(user)->dict:
+def user_to_dict(user:Users)->dict:
     return {"user_id":user.user_id, 
             "email":user.email, 
             "display_name":user.display_name, 

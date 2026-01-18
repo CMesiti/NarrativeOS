@@ -52,4 +52,3 @@ created_at      TIMESTAMP
 User
  ├── CampaignMember ── Campaign
  └── PlayerCharacter ── Campaign
-

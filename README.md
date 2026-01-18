@@ -22,7 +22,7 @@ Dungeon Master Assistant to help guide a DM through random encounters, NPC respo
 - `uv pip compile pyproject.toml -o requirements.txt`
 
 
-## Database
+## Database (Working on DB Migration Tool Implementation)
 
 ### Install PostgreSQL
 [PostgreSQL Installation](https://www.postgresql.org/download/)

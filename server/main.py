@@ -2,7 +2,8 @@ from flask import Flask, jsonify, request, make_response
 from config.db import get_connection
 from sqlalchemy import text, select
 from sqlalchemy.orm import Session, selectinload
-from models import Users, Campaigns, ModelBase
+from models import Users, Campaigns, ModelBase, user_to_dict
+
 
 # Refactor this into an app factory
 # Add SQLAlchemy sessions properly
@@ -22,18 +23,18 @@ def login():
 
 @app.route("/users")
 def get_users():
-    result = {"Message":"", "Data":[]}
+    result = {"Message":"", "Users":[]}
     try:
         with Session(db) as session:
             #this is a eager loading technique solving the N+1 Query problem
             stmt = select(Users).options(selectinload(Users.campaigns))
             #scalars returns list of objs and execute returns list of rows
             users_ls = session.scalars(stmt).all()
-            # for user in users_ls:
-            #     result["Data"].append(user.get_json())
+            for user in users_ls:
+                result["Users"].append(user_to_dict(user))
         result["Message"] = "GET Successful"
         print(result)
-        return jsonify({"Users":result["Message"]})
+        return jsonify({"Data":result})
 
     except:
         result["Message"] = "GET ERROR"

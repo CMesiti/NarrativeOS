@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, make_response
 from config.db import get_connection
-from sqlalchemy import text, select
+from sqlalchemy import text, select, update, delete, insert
 from sqlalchemy.orm import Session, selectinload
 from models import Users, Campaigns, ModelBase, user_to_dict
 import bcrypt
@@ -96,18 +96,34 @@ def register_user():
 
 @app.route("/users/<uuid:user_id>", methods = ["PUT"])
 def update_user(user_id):
-    #update the user by id
     #form is a dictionary
     pswd = request.form.get("password", None)
     display_name = request.form.get("display_name", None)
+    user_stmt = select(Users).where(Users.user_id == user_id)
     if pswd:
         #add password constraints
-
+        if len(pswd) <= 12:
+            return jsonify({"ERROR":"Password must be 12 or more chars"})
+        elif pswd.isalnum() or " " in pswd:
+            return jsonify({"ERROR":"Must contain special character and no spaces"})
         #hash and store
-        pass
-
+        hash = hash_pass(pswd)
+        #get user
+        with Session(db) as session:
+            user_obj = session.scalars(user_stmt).one()
+            user_obj.pass_hash = hash
+            session.commit()
+        return jsonify({"Message": "Successfully updated password"})
     elif display_name:
-        pass
+        if len(display_name) > 50:
+            return jsonify({"ERROR":"Name must be less than 50 chars"})
+        elif " " in display_name:
+            return jsonify({"ERROR":"No Spaces Allowed"})
+        with Session(db) as session:
+            user_obj = session.scalars(user_stmt).one()
+            user_obj.display_name = display_name
+            session.commit()
+        return jsonify({"Message": "Successfully updated display name"})
     else:
         return jsonify({"ERROR": "Missing Update Information"}), 400
   
@@ -116,7 +132,13 @@ def update_user(user_id):
 
 @app.route("/users/<uuid:user_id>", methods=["DELETE"])
 def remove_user(user_id):
-    pass
+    pswd = request.form.get("password", None)
+    if not pswd:
+        return jsonify({"ERROR":"Requires Password"}), 401
+    with Session(db) as session:
+        stmt = delete()
+
+    #add session auth, ensure current user request, and recieve password
 
 #Lets try a different method. This endpoint will group operations together, 
 @app.route("/campaigns", methods=["GET", "POST", "PUT", "DELETE"])

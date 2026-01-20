@@ -1,8 +1,29 @@
 ## Data Structure (DTO Required?)
+- No DTO Architecture for MVP1, Not required for current overall scope.
+
+## File Structure
+- Controller (HTTP)
+   ↓
+- Service (business logic)
+   ↓
+- ORM Models (persistence)
+   ↓
+- DTO Mapper (representation)
+   ↓
+- Controller (response)
+
+Note: 
+- ORM models should describe “what exists.”
+- DTOs describe “what we show.”
 
 
-{'Message': 'GET Successful', 
-'Users': [{
+## Requests
+
+### Users Endpoints
+   - GET request, no parameters "/users"
+      - Simple Get Request Returns users in format:
+      - "Data":{'Message': 'GET Successful', 
+   'Users': [{
     'user_id': UUID('f58babf1-d019-4dad-a2a5-9429783268c1'),
     'email': '-----@gmail.com', 
     'display_name': 'yoda', 
@@ -20,19 +41,7 @@
     'campaigns': []}
     ]
 }
-
-
-## File Structure
-- Controller (HTTP)
-   ↓
-- Service (business logic)
-   ↓
-- ORM Models (persistence)
-   ↓
-- DTO Mapper (representation)
-   ↓
-- Controller (response)
-
-Note: 
-- ORM models should describe “what exists.”
-- DTOs describe “what we show.”
+   - POST request, register user, required email/pass, "/users"
+   - PUT request, parameters user_id (retrieved from session) update user, required display_name or password
+   - DELETE request, requires password, user_id (retrieved from session), delete user from db (cascade)
+- Postman Request-Response Examples: 

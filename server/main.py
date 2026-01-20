@@ -3,15 +3,16 @@ from config.db import get_connection
 from sqlalchemy import text, select, update, delete, insert
 from sqlalchemy.orm import Session, selectinload
 from models import Users, Campaigns, ModelBase, user_to_dict
-import bcrypt
+from argon2 import PasswordHasher
 
 def hash_pass(pswd):
-    salt = bcrypt.gensalt()
-    hash = bcrypt.hashpw(pswd, salt)
+    ph = PasswordHasher()
+    hash = ph.hash(pswd)
     return hash
 
-def compare_pass(entered_pswd, hash):
-    return bcrypt.checkpw(entered_pswd, hash)
+def check_pass(entered_pswd, hash):
+    ph = PasswordHasher()
+    return ph.verify(hash, entered_pswd)
 
 
 
@@ -48,7 +49,7 @@ def get_users():
         return jsonify({"Data":result}), 200
     except Exception as e:
         result["Message"] = f"GET ERROR, {e}"
-        return jsonify({"ERROR":result})
+        return jsonify({"ERROR":result}), 400
 
 
 @app.route("/users", methods=["POST"])
@@ -72,7 +73,7 @@ def register_user():
             email_scalar = session.scalars(email_stmt).one()
             if email_scalar:
                 result["Message"] = "Email Taken"
-                return jsonify({"ERROR":result}), 201
+                return jsonify({"ERROR":result}), 400
     
             newUser = Users()
             newUser.email =data["email"]
@@ -86,45 +87,44 @@ def register_user():
             result["Users"] = user_to_dict(newUser)
 
         result["Message"] = "Created User Successfully"
-        return jsonify({"Data": result})
+        return jsonify({"Data": result}), 201
     
     except Exception as e:
         result["Message"] = f"Register ERROR, {e}"
         return jsonify({"ERROR": result}), 400
 
 
-
+#**UPDATE** ORM operation
 @app.route("/users/<uuid:user_id>", methods = ["PUT"])
 def update_user(user_id):
     #form is a dictionary
     pswd = request.form.get("password", None)
     display_name = request.form.get("display_name", None)
     try:
-        user_stmt = select(Users).where(Users.user_id == user_id)
         if pswd:
             #add password constraints
             if len(pswd) <= 12:
-                return jsonify({"ERROR":"Password must be 12 or more chars"})
+                return jsonify({"ERROR":"Password must be 12 or more chars"}), 400
             elif pswd.isalnum() or " " in pswd:
-                return jsonify({"ERROR":"Must contain special character and no spaces"})
+                return jsonify({"ERROR":"Must contain special character and no spaces"}), 400
             #hash and store
             hash = hash_pass(pswd)
             #get user
             with Session(db) as session:
-                user_obj = session.scalars(user_stmt).one()
-                user_obj.pass_hash = hash
+                user = session.get(Users, user_id)
+                user.pass_hash = hash
                 session.commit()
-            return jsonify({"Message": "Successfully updated password"})
+            return jsonify({"Message": "Successfully updated password"}), 200
         elif display_name:
             if len(display_name) > 50:
-                return jsonify({"ERROR":"Name must be less than 50 chars"})
+                return jsonify({"ERROR":"Name must be less than 50 chars"}), 400
             elif " " in display_name:
-                return jsonify({"ERROR":"No Spaces Allowed"})
+                return jsonify({"ERROR":"No Spaces Allowed"}), 400
             with Session(db) as session:
-                user_obj = session.scalars(user_stmt).one()
-                user_obj.display_name = display_name
+                user = session.get(Users, user_id)
+                user.display_name = display_name
                 session.commit()
-            return jsonify({"Message": "Successfully updated display name"})
+            return jsonify({"Message": "Successfully updated display name"}), 200
         else:
             return jsonify({"ERROR": "Missing Update Information"}), 400
     except Exception as e:
@@ -136,15 +136,20 @@ def update_user(user_id):
 def remove_user(user_id):
     pswd = request.form.get("password", None)
     try:
-        if not pswd:
-            return jsonify({"ERROR":"Requires Password"}), 401
         with Session(db) as session:
-            stmt = delete(Users).where(Users.user_id == user_id)
-            session.execute(stmt)
-        return jsonify({"Message":"User Successfully deleted"})
+            # stmt = select(Users).where(Users.user_id == user_id)
+            # user = session.scalars(stmt).one()
+            # if not(pswd and check_pass(pswd, user.pass_hash)):
+            #     return jsonify({"ERROR":"Incorrect Password"}), 401
+            user = session.get(Users, user_id)
+            session.delete(user)
+            session.commit()
+        return jsonify({"Message":"User Successfully deleted"}), 200
     except Exception as e:
         return jsonify({"ERROR": e}), 400
     #add session auth, ensure current user request, and recieve password
+
+
 
 #Lets try a different method. This endpoint will group operations together, 
 @app.route("/campaigns", methods=["GET", "POST", "PUT", "DELETE"])

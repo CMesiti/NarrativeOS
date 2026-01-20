@@ -34,7 +34,6 @@ def login():
 @app.route("/users")
 def get_users():
     response = {"Users":[],"Message":""}
-
     try:
         with Session(db) as session:
             #this is a eager loading technique solving the N+1 Query problem
@@ -67,8 +66,6 @@ def register_user():
             return jsonify({"ERROR":response})
         if "display_name" not in data:
             data["display_name"] = data["email"].split('@')[0]
-
-
         pswd = data["password"]
         email = data["email"]
         display_name = data["display_name"]
@@ -108,7 +105,6 @@ def update_user(user_id):
     #form is a dictionary
     pswd = request.form.get("password", None)
     display_name = request.form.get("display_name", None)
-
     try:
         if pswd:
             #add password constraints
@@ -146,7 +142,6 @@ def update_user(user_id):
 @app.route("/users/<uuid:user_id>", methods=["DELETE"])
 def remove_user(user_id):
     pswd = request.form.get("password", None)
-    
     try:
         with Session(db) as session:
             user = session.get(Users, user_id)

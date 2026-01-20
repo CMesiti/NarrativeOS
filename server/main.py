@@ -165,7 +165,7 @@ def remove_user(user_id):
             session.commit()
         return jsonify({"Message":"User Successfully deleted"}), 200
     
-    
+
     except Exception as e:
         return jsonify({"ERROR": e}), 400
     #add session auth, ensure current user request, and recieve password
@@ -191,28 +191,3 @@ if __name__ == "__main__":
     ModelBase.metadata.create_all(db)
     app.run(debug=True)
 
-
-
-# @app.route("/users")
-# def get_users():
-#     response = "None"
-#     #begin once method
-#     with db.begin() as connection:
-#         try:
-#             response = connection.execute(text("SELECT * FROM users"))
-#             print("Successful Query!")
-#         except:
-#             print("Query ERROR")
-    
-#     return str(response.fetchall())
-
-# @app.route("/campaigns")
-# def get_campaigns():
-#     responses = "None"
-#     try:
-#         with db.begin() as connection:
-#             responses = connection.execute(text("SELECT * FROM campaigns"))
-#             print("Successful Query!")
-#     except:
-#         print("Query Error")
-#     return str(responses.fetchall())

@@ -17,13 +17,7 @@ def check_pass(entered_pswd, hash):
         return True, None
     except exceptions.VerifyMismatchError as e:
         return False, e
-
-
-
-# Refactor this into an app factory
-# Add SQLAlchemy sessions properly
-# Structure Campaign Forge for scaling (routes / blueprints)
-# CORE vs ORM, The ORM uses sessions and Core uses a straight connection to the DBAPI
+    
 app = Flask(__name__)
 db = get_connection()
 

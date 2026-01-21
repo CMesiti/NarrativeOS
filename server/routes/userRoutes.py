@@ -22,11 +22,6 @@ def get_users():
     
 
 
-
-
-
-
-
 @users_bp.route("/", methods=["POST"])
 def register_user():
     response = {"Users":"","Message":""}

@@ -1,12 +1,7 @@
 from flask import Blueprint, request, url_for, jsonify
 from config.db import get_connection
-from sqlalchemy import text, select, update, delete, insert
-from sqlalchemy.orm import Session, selectinload
-from models import Users, Campaigns, ModelBase, user_to_dict
-from argon2 import PasswordHasher, exceptions
-from flask import Flask, jsonify, request, make_response
-
-db = get_connection()
+from models import Users, user_to_dict
+from services.userService import UserService
 #blueprint syntax, name, where it's defined, and url_prefix, versioning 1 of bp
 users_bp = Blueprint("users", __name__, url_prefix = "/users/v1")
 
@@ -14,22 +9,24 @@ users_bp = Blueprint("users", __name__, url_prefix = "/users/v1")
 def get_users():
     response = {"Users":[],"Message":""}
     try:
-        with Session(db) as session:
-            #this is a eager loading technique solving the N+1 Query problem
-            stmt = select(Users).options(selectinload(Users.campaigns))
-            #scalars returns list of objs and execute returns list of rows
-            users_ls = session.scalars(stmt).all()
-            for user in users_ls:
-                response["Users"].append(user_to_dict(user))
+        service = UserService()
+        user_data = service.get_user_data()
+        if "ERROR" in user_data:
+            return jsonify(user_data)
         response["Message"] = "GET Successful"
-        print(response)
+        response["Users"] = user_data
         return jsonify({"Data":response}), 200
-    
-
     except Exception as e:
         response["Message"] = f"GET ERROR, {e}"
         return jsonify({"ERROR":response}), 400
     
+
+
+
+
+
+
+
 @users_bp.route("/", methods=["POST"])
 def register_user():
     response = {"Users":"","Message":""}

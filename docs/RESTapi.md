@@ -1,8 +1,10 @@
 ## Data Structure (DTO Required?)
 - No DTO Architecture for MVP1, Not required for current overall scope.
+- Note*: when you start chopping up the architecture of your own project, when you find yourself in a jam with awkward logic, circular imports, or frustrating dependencies, remember this post. Give yourself permission to take a step back and rip it all apart again, this time with the benefit of what your incremental improvements have taught you.
 
-## File Structure
-- Controller (HTTP)
+
+## File Structure (Similar to MVP pattern)
+- Routes (HTTP)
    ↓
 - Service (business logic)
    ↓
@@ -10,7 +12,7 @@
    ↓
 - DTO Mapper (representation)
    ↓
-- Controller (response)
+- Routes (response)
 
 Note: 
 - ORM models should describe “what exists.”

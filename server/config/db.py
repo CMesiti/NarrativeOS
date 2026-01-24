@@ -8,11 +8,11 @@ from models import ModelBase
 db = SQLAlchemy(model_class = ModelBase)
 #Using flask sqlalchemy we initialize the extension on current application.
 load_dotenv()
-def init_db():
+def init_db(app):
     print("Creating Connection Pool...")
     URL = os.getenv("DATABASE_URL")
     current_app.config["SQLALCHEMY_DATABASE_URI"] = URL
-    db.init_app(current_app)
+    db.init_app(app)
     db.create_all()
 
 

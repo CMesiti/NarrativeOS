@@ -9,8 +9,7 @@ def create_app(test_config = None):
     CORS(app)
     #Since we use the g object we enable access to current app in configuration.
     with app.app_context():
-        init_db()
-
+        init_db(app)
     app.register_blueprint(userRoutes.users_bp)
     app.register_blueprint(campaignRoutes.campaigns_bp)
     app.register_blueprint(authRoutes.auth_bp)

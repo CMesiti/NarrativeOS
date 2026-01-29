@@ -26,8 +26,15 @@ class PlayerCharacters(ModelBase):
     #declare table columns, dtypes, and mappings. 
 
     #Many to One with users/campaigns?
-    user:Mapped["Users"] = relationship("Users", back_populates="player_characters")
-    campaign:Mapped["Campaigns"] = relationship("Campaigns", back_populates="player_characters")
+    user:Mapped["Users"] = relationship(
+        "Users", 
+        back_populates="player_characters",
+        passive_deletes = True)
+    
+    campaign:Mapped["Campaigns"] = relationship(
+        "Campaigns",
+         back_populates="player_characters",
+         passive_deletes=True)
 
 
     def __repr__(self):

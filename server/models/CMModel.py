@@ -16,10 +16,19 @@ class CampaignMembers(ModelBase):
     user_role: Mapped[dict] = mapped_column(ENUM(('DM', 'Player', 'Viewer'), name = "USER_ROLE"))
     joined_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True))
 
+    #many to 1
+    user: Mapped["Users"] = relationship(
+        "Users",
+         back_populates="campaign_members",
+         passive_deletes=True)
+    #many to one
+    campaign: Mapped["Campaigns"] = relationship(
+        "Campaigns",
+         back_populates="campaign_members", 
+         passive_deletes=True) 
     
-    user: Mapped["Users"] = relationship("Users", back_populates="campaign_members")
-    campaign: Mapped["Campaigns"] = relationship("Campaigns", back_populates="campaign_members") 
-    
+
+
     def __repr__(self):
         return f"""
             campaign_id - {self.campaign_id}

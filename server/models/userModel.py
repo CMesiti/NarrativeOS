@@ -10,6 +10,8 @@ import uuid
 class Users(ModelBase):
     #table metadata
     __tablename__ = "users"
+
+    
     #Python Dtypes = SQL Dtypes - Mapping
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key = True, server_default=text("gen_random_uuid()")) 
     #Mapped type hints, conversion python to database types
@@ -17,12 +19,22 @@ class Users(ModelBase):
     pass_hash: Mapped[str] = mapped_column(VARCHAR(200), nullable=False)
     display_name: Mapped[Optional[str]] = mapped_column(VARCHAR(50))
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default = func.current_timestamp())
+
+
     #One-to-Many Relationship
-    campaigns:Mapped[List["Campaigns"]] = relationship("Campaigns", back_populates = "user")
+    campaigns:Mapped[List["Campaigns"]] = relationship(
+        "Campaigns",
+         back_populates = "user")
     #association relationship
-    campaign_members:Mapped[List["CampaignMembers"]] = relationship("CampaignMembers", back_populates="user")
+    campaign_members:Mapped[List["CampaignMembers"]] = relationship(
+        "CampaignMembers", 
+        back_populates="user",
+        cascade="all, delete-orphan")
     #one to many
-    player_characters:Mapped[List["PlayerCharacters"]] = relationship("PlayerCharacters", back_populates="user")
+    player_characters:Mapped[List["PlayerCharacters"]] = relationship(
+        "PlayerCharacters",
+         back_populates="user",
+         cascade="all, delete")
 
     def __repr__(self)->str:
         return f"""USER: 

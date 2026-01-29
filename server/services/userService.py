@@ -11,6 +11,7 @@ class ServiceError(Exception):
 # Calling the Session.scalars() method is the equivalent to calling upon 
 # Session.execute() to receive a Result object, then calling upon Result.scalars() to receive a ScalarResult object.
 class UserService:
+
     def get_user_data(self):
         #this is a eager loading technique solving the N+1 Query problem
         stmt = select(Users).options(selectinload(Users.campaigns))
@@ -76,6 +77,7 @@ class UserService:
             return user_to_dict(user)
         else:
             raise ServiceError("Missing Update Information")
+        
     def remove_existing_user(self, user_id, pswd):
         user = db.session.get(Users, user_id)
         if not pswd:

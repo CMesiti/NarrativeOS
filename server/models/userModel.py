@@ -4,13 +4,14 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List, Optional
 from models import ModelBase, CampaignMembers, Campaigns, PlayerCharacters, campaign_to_dict
 from datetime import datetime
+import uuid
 
 #models follow tables under DBQueries docs
 class Users(ModelBase):
     #table metadata
     __tablename__ = "users"
     #Python Dtypes = SQL Dtypes - Mapping
-    user_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True), primary_key = True, server_default=text("gen_random_uuid()")) 
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key = True, server_default=text("gen_random_uuid()")) 
     #Mapped type hints, conversion python to database types
     email: Mapped[str] = mapped_column(VARCHAR(355), unique=True, nullable=False )
     pass_hash: Mapped[str] = mapped_column(VARCHAR(200), nullable=False)

@@ -3,7 +3,7 @@ from models import ModelBase, Users, Campaigns
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import ForeignKey, text
 from datetime import datetime
-
+import uuid
 
 
 #classic many to many association table
@@ -11,8 +11,8 @@ class CampaignMembers(ModelBase):
     __tablename__ = "campaign_members"
 
     #declare table columns, dtypes, and mappings
-    campaign_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), primary_key=True)
-    user_id: Mapped[UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), primary_key = True)
+    campaign_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), primary_key=True)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), primary_key = True)
     user_role: Mapped[dict] = mapped_column(ENUM(('DM', 'Player', 'Viewer'), name = "USER_ROLE"))
     joined_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True))
 

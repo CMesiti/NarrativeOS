@@ -3,7 +3,7 @@ from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import ForeignKey, func, text
 from datetime import datetime
 from models import ModelBase, Users, Campaigns
-
+import uuid
 # potential import - class JSONB.Comparator
 # inherits from sqlalchemy.dialects.postgresql.json.Comparator
 # Define comparison operations for JSON.
@@ -14,9 +14,9 @@ class PlayerCharacters(ModelBase):
     __tablename__ = "player_characters"
 
 
-    character_id:Mapped[UUID] =  mapped_column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
-    campaign_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), nullable = False)
-    user_id:Mapped[UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), nullable = False)
+    character_id:Mapped[uuid.UUID] =  mapped_column(UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"))
+    campaign_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), nullable = False)
+    user_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), nullable = False)
     character_name:Mapped[str] = mapped_column(VARCHAR(50), nullable = False)
     character_class:Mapped[dict] = mapped_column(JSONB)
     character_stats:Mapped[dict] = mapped_column(JSONB)

@@ -1,13 +1,14 @@
-from sqlalchemy.dialects.postgresql import JSONB, UUID, ARRAY, ENUM, VARCHAR, TIMESTAMP, INTEGER
+from sqlalchemy.dialects.postgresql import JSONB, UUID, VARCHAR, TIMESTAMP, INTEGER
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import ForeignKey, func, text
 from datetime import datetime
-from models import ModelBase, Users, Campaigns
+from models import ModelBase
 import uuid
-# potential import - class JSONB.Comparator
-# inherits from sqlalchemy.dialects.postgresql.json.Comparator
-# Define comparison operations for JSON.
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from models import Campaigns, Users
+# Keep the IDE happy, using Type checking
 
 #All characters for all campaigns and their associated users.
 class PlayerCharacters(ModelBase):

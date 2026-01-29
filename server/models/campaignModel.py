@@ -2,11 +2,13 @@ from sqlalchemy import  ForeignKey, VARCHAR, text, func
 from sqlalchemy.dialects.postgresql import UUID, TEXT, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List, Optional
-from models import ModelBase, CampaignMembers, PlayerCharacters
+from models import ModelBase
 from datetime import datetime
 import uuid
+from typing import TYPE_CHECKING
 
-
+if TYPE_CHECKING:
+    from models import CampaignMembers, PlayerCharacters
 #ADD UNIQUE CONTRAINT TO CAMPAIGN TITLES
 #models follow tables under DBQueries docs, refer SQLalchemy ORM documentation
 class Campaigns(ModelBase):

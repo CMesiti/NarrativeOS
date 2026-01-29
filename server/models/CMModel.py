@@ -1,10 +1,13 @@
-from sqlalchemy.dialects.postgresql import JSONB, UUID, ARRAY, ENUM, VARCHAR, TIMESTAMP
-from models import ModelBase, Users, Campaigns
+from sqlalchemy.dialects.postgresql import  UUID, ENUM, TIMESTAMP
+from models import ModelBase
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from sqlalchemy import ForeignKey, text
+from sqlalchemy import ForeignKey
 from datetime import datetime
 import uuid
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from models import Campaigns, Users
 
 #classic many to many association table
 class CampaignMembers(ModelBase):

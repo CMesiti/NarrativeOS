@@ -1,5 +1,8 @@
 from argon2 import PasswordHasher, exceptions
 
+class ServiceError(Exception):
+    pass
+
 def hash_pass(pswd):
     ph = PasswordHasher()
     hash = ph.hash(pswd)

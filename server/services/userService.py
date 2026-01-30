@@ -2,15 +2,14 @@ from sqlalchemy import text, select, update, delete, insert
 from config.db import db
 from sqlalchemy.orm import Session, selectinload
 from models import Users, user_to_dict
-from services.util import hash_pass, check_pass
+from services.util import hash_pass, check_pass, ServiceError
 
-#class holds CRUD
-class ServiceError(Exception):
-    pass
+
 #db.session is our session obj, 
 # Calling the Session.scalars() method is the equivalent to calling upon 
 # Session.execute() to receive a Result object, then calling upon Result.scalars() to receive a ScalarResult object.
 class UserService:
+
     def get_user_data(self):
         #this is a eager loading technique solving the N+1 Query problem
         stmt = select(Users).options(selectinload(Users.campaigns))
@@ -33,7 +32,7 @@ class UserService:
         rows = db.session.scalars(email_stmt).first()
         print(rows)
         if rows:
-            raise "Email Taken"
+            raise ServiceError("Email Taken")
         if len(pswd) <= 12:
             raise ServiceError("Password must be 12 or more chars")
         elif " " in pswd or pswd.isalnum():
@@ -64,7 +63,7 @@ class UserService:
             user = db.session.get(Users, user_id)
             user.pass_hash = hash
             db.session.commit()
-            return user
+            return user_to_dict(user)
         elif display_name:
             if len(display_name) > 50:
                 raise ServiceError("Name must be less than 50 chars")
@@ -73,9 +72,10 @@ class UserService:
             user = db.session.get(Users, user_id)
             user.display_name = display_name
             db.session.commit()
-            return user
+            return user_to_dict(user)
         else:
             raise ServiceError("Missing Update Information")
+        
     def remove_existing_user(self, user_id, pswd):
         user = db.session.get(Users, user_id)
         if not pswd:
@@ -85,3 +85,4 @@ class UserService:
             raise ServiceError(f"Validation Error {e}")
         db.session.delete(user)
         db.session.commit()
+        return user_to_dict(user)

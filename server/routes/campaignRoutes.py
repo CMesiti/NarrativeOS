@@ -3,13 +3,14 @@ import requests
 
 campaigns_bp = Blueprint("campaigns", __name__, "/campaigns/v1/")
 #Lets try a different method. This endpoint will group operations together, 
-@campaigns_bp.route("/", methods=["GET", "POST", "PUT", "DELETE"])
-def campaign_dashboard():
-    if request.method == "GET":
-        pass
-    elif request.method == "POST":
-        pass
-    elif request.method == "PUT":
-        pass
-    else:
-        pass
+
+
+#we can't group operations that require url parameters, also this makes it less readable
+@campaigns_bp.route("/", methods=["GET"])
+def get_campaigns():
+    pass
+
+
+@campaigns_bp.route("/", methods=["POST"])
+def create_campaign():
+    pass

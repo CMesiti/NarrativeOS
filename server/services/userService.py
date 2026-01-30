@@ -2,11 +2,9 @@ from sqlalchemy import text, select, update, delete, insert
 from config.db import db
 from sqlalchemy.orm import Session, selectinload
 from models import Users, user_to_dict
-from services.util import hash_pass, check_pass
+from services.util import hash_pass, check_pass, ServiceError
 
-#class holds CRUD
-class ServiceError(Exception):
-    pass
+
 #db.session is our session obj, 
 # Calling the Session.scalars() method is the equivalent to calling upon 
 # Session.execute() to receive a Result object, then calling upon Result.scalars() to receive a ScalarResult object.

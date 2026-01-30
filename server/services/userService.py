@@ -1,9 +1,9 @@
 from sqlalchemy import text, select, update, delete, insert
 from config.db import db
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import selectinload
 from models import Users, user_to_dict
 from services.util import hash_pass, check_pass, ServiceError
-
+from flask_jwt_extended import get_jwt_identity
 
 #db.session is our session obj, 
 # Calling the Session.scalars() method is the equivalent to calling upon 
@@ -16,6 +16,25 @@ class UserService:
         #scalars returns list of objs and execute returns list of rows
         users_ls = db.session.scalars(stmt).all()
         return [user_to_dict(user) for user in users_ls]
+    
+    def get_user_by_email(self, email):
+        stmt = select(Users).where(Users.email == email)
+        user = db.session.scalars(stmt).first()
+        return user
+    
+    def login_user(self, login_data):
+        #check email and pass return error or valid user obj.
+        email = login_data.get("email", None)
+        pswd = login_data.get("password", None)
+        if not email or not pswd:
+            raise ServiceError("Missing Email or Password")
+        user = self.get_user_by_email(email)
+        if not user:
+            raise ServiceError("Invalid Login")
+        is_valid, _ = check_pass(pswd, user.pass_hash)
+        if not is_valid:
+            raise ServiceError(f"Invalid Login")
+        return user
     
     def register_new_user(self, user_data:dict) -> list:
         if "email" not in user_data:
@@ -49,6 +68,7 @@ class UserService:
         return created_user
     
     def update_existing_user(self, user_id, updates):
+        current_user = get_jwt_identity()
         pswd = updates.get("password", None)
         display_name = updates.get("display_name", None)
         if pswd:
@@ -77,6 +97,7 @@ class UserService:
             raise ServiceError("Missing Update Information")
         
     def remove_existing_user(self, user_id, pswd):
+        current_user = get_jwt_identity()
         user = db.session.get(Users, user_id)
         if not pswd:
            raise ServiceError("Password Required")

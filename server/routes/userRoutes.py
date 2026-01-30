@@ -1,7 +1,8 @@
 from flask import Blueprint, request, jsonify
 from models import Users
-from services.userService import UserService, ServiceError
-
+from services.userService import UserService
+from services.util import ServiceError
+from flask_jwt_extended import jwt_required, get_jwt_identity
 #blueprint syntax, name, where it's defined, and url_prefix, versioning 1 of bp
 users_bp = Blueprint("users", __name__, url_prefix = "/users/v1")
 
@@ -26,7 +27,6 @@ def get_users():
 @users_bp.route("/", methods=["POST"])
 def register_user():
     data = request.get_json()
-    #Validate information, **CHECK FOR DUPLICATES**
     try:
         service = UserService()
         user_created = service.register_new_user(data)
@@ -41,11 +41,13 @@ def register_user():
         return jsonify({
             "ERROR": str(e)
             }), 500
-    
 
+# Protect a route with jwt_required, which will kick out requests
+# without a valid JWT present.   
+@jwt_required
 @users_bp.route("/<uuid:user_id>", methods = ["PUT"])
 def update_user(user_id):
-    #form is a dictionary
+    #form is a dictionary, current user is user id in jwt
     data = request.form
     print(data)
     try:

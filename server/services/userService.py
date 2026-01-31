@@ -3,7 +3,7 @@ from config.db import db
 from sqlalchemy.orm import selectinload
 from models import Users, user_to_dict
 from services.util import hash_pass, check_pass, ServiceError
-from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import get_jwt_identity,verify_jwt_in_request
 
 #db.session is our session obj, 
 # Calling the Session.scalars() method is the equivalent to calling upon 
@@ -67,8 +67,11 @@ class UserService:
         created_user = [user_to_dict(newUser)]
         return created_user
     
-    def update_existing_user(self, user_id, updates):
-        current_user = get_jwt_identity()
+    def update_existing_user(self, updates):
+        if verify_jwt_in_request():
+            current_user = get_jwt_identity()
+        else:
+            raise ServiceError("Unauthorized Access")
         pswd = updates.get("password", None)
         display_name = updates.get("display_name", None)
         if pswd:
@@ -80,7 +83,7 @@ class UserService:
             #hash and store
             hash = hash_pass(pswd)
             #get user
-            user = db.session.get(Users, user_id)
+            user = db.session.get(Users, current_user)
             user.pass_hash = hash
             db.session.commit()
             return user_to_dict(user)
@@ -89,16 +92,19 @@ class UserService:
                 raise ServiceError("Name must be less than 50 chars")
             elif " " in display_name:
                 raise ServiceError("No Spaces Allowed")
-            user = db.session.get(Users, user_id)
+            user = db.session.get(Users, current_user)
             user.display_name = display_name
             db.session.commit()
             return user_to_dict(user)
         else:
             raise ServiceError("Missing Update Information")
         
-    def remove_existing_user(self, user_id, pswd):
-        current_user = get_jwt_identity()
-        user = db.session.get(Users, user_id)
+    def remove_existing_user(self, pswd):
+        if verify_jwt_in_request():
+            current_user = get_jwt_identity()
+        else:
+            raise ServiceError("Unauthorized Access")
+        user = db.session.get(Users, current_user)
         if not pswd:
            raise ServiceError("Password Required")
         is_valid, e = check_pass(pswd, user.pass_hash)

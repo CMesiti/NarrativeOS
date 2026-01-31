@@ -15,6 +15,9 @@ from services.util import ServiceError
 #for SSR we would create HTML templates, fill, and render with each request.
 auth_bp = Blueprint("auth", __name__, url_prefix="/auth/")
 
+# store the token when you login, 
+# and add the token as a header each time you make a request to a protected route. 
+# Logging out is as simple as deleting the token.
 
 @auth_bp.route("/login", methods = ["GET", "POST"])
 def login():

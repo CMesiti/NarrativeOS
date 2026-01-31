@@ -52,7 +52,6 @@ def user_to_dict(user:Users)->dict:
             "email":user.email, 
             "display_name":user.display_name, 
             "created_at": user.created_at,
-            "pass_hash": user.pass_hash,
             "campaigns": [campaign_to_dict(campaign) for campaign in user.campaigns]}
 
 

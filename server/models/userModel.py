@@ -25,11 +25,11 @@ class Users(ModelBase):
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default = func.current_timestamp())
 
 
-    #One-to-Many Relationship
+    #One-to-Many Relationship (owned campaigns)
     campaigns:Mapped[List["Campaigns"]] = relationship(
         "Campaigns",
          back_populates = "user")
-    #association relationship
+    #association relationship 
     campaign_members:Mapped[List["CampaignMembers"]] = relationship(
         "CampaignMembers", 
         back_populates="user",

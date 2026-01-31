@@ -86,7 +86,7 @@ class UserService:
             user = db.session.get(Users, current_user)
             user.pass_hash = hash
             db.session.commit()
-            return user_to_dict(user)
+            return [user_to_dict(user)]
         elif display_name:
             if len(display_name) > 50:
                 raise ServiceError("Name must be less than 50 chars")
@@ -95,7 +95,7 @@ class UserService:
             user = db.session.get(Users, current_user)
             user.display_name = display_name
             db.session.commit()
-            return user_to_dict(user)
+            return [user_to_dict(user)]
         else:
             raise ServiceError("Missing Update Information")
         
@@ -112,4 +112,4 @@ class UserService:
             raise ServiceError(f"Validation Error {e}")
         db.session.delete(user)
         db.session.commit()
-        return user_to_dict(user)
+        return [user_to_dict(user)]

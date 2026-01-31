@@ -80,5 +80,7 @@ def remove_user():
             {"ERROR": str(e)
              }), 400
     except Exception as e:
-        return jsonify({"ERROR": e}), 500
+        return jsonify(
+            {"ERROR": str(e)
+             }), 500
     #add session auth, ensure current user request, and recieve password

@@ -39,7 +39,12 @@ class CampaignService():
         campaign = db.session.get(Campaigns, campaign_id) 
         if campaign.created_by != current_user:
             raise ServiceError("Unauthorized Access")
-        
+        if title:
+            campaign.title = title
+        if description:
+            campaign.description = description
+        db.session.commit()
+        return [campaign_to_dict(campaign)]
 
-    def delete_existing_campaign():
+    def delete_existing_campaign(campaign_id):
         pass

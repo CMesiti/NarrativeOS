@@ -48,4 +48,11 @@ def update_campaign(campaign_id):
 @jwt_required
 @campaigns_bp.route("/<uuid:campaign_id>", methods=["DELETE"])
 def delete_campaign(campaign_id):
-    pass
+    try:
+        data = request.form
+        service = CampaignService
+        removed_campaign = service.delete_existing_campaign(campaign_id)
+    except ServiceError as e:
+        pass
+    except Exception as e:
+        pass

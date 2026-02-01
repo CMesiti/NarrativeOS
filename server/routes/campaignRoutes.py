@@ -49,9 +49,9 @@ def update_campaign(campaign_id):
 @campaigns_bp.route("/<uuid:campaign_id>", methods=["DELETE"])
 def delete_campaign(campaign_id):
     try:
-        data = request.form
         service = CampaignService
         removed_campaign = service.delete_existing_campaign(campaign_id)
+        return jsonify({"campaign_data": removed_campaign})
     except ServiceError as e:
         pass
     except Exception as e:

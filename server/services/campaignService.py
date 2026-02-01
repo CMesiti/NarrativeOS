@@ -47,4 +47,16 @@ class CampaignService():
         return [campaign_to_dict(campaign)]
 
     def delete_existing_campaign(campaign_id):
+        #verify that the user deleting is created by
+        if verify_jwt_in_request():
+            current_user = get_jwt_identity()
+        else:
+            raise ServiceError("Unauthorized Access")
+        
+        campaign = db.session.get(Campaigns, campaign_id)
+        if current_user != campaign.created_by:
+            raise ServiceError("Unauthorized Access")
+        db.session.delete(campaign)
+        db.session.commit()
+
         pass

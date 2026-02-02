@@ -68,10 +68,7 @@ class UserService:
         return created_user
     
     def update_existing_user(self, updates):
-        if verify_jwt_in_request():
-            current_user = get_jwt_identity()
-        else:
-            raise ServiceError("Unauthorized Access")
+        current_user = get_jwt_identity()
         pswd = updates.get("password", None)
         display_name = updates.get("display_name", None)
         if pswd:
@@ -100,10 +97,7 @@ class UserService:
             raise ServiceError("Missing Update Information")
         
     def remove_existing_user(self, pswd):
-        if verify_jwt_in_request():
-            current_user = get_jwt_identity()
-        else:
-            raise ServiceError("Unauthorized Access")
+        current_user = get_jwt_identity()
         user = db.session.get(Users, current_user)
         if not pswd:
            raise ServiceError("Password Required")

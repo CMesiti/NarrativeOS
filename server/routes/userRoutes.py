@@ -48,7 +48,7 @@ def register_user():
 @jwt_required()
 def update_user():
     #form is a dictionary, current user is user id in jwt
-    data = request.form
+    data = request.get_json()
     print(data)
     try:
         service = UserService()
@@ -69,7 +69,8 @@ def update_user():
 @users_bp.route("/", methods=["DELETE"])
 @jwt_required()
 def remove_user():
-    pswd = request.form.get("password", None)
+    data = request.get_json()
+    pswd = data.get(pswd, None)
     try:
         service = UserService()
         user_deleted = service.remove_existing_user(pswd)

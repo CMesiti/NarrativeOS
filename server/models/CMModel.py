@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import  UUID, ENUM, TIMESTAMP
 from models import ModelBase
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, func
 from datetime import datetime
 import uuid
 import enum
@@ -22,7 +22,7 @@ class CampaignMembers(ModelBase):
     campaign_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), primary_key=True)
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), primary_key = True)
     user_role: Mapped[Role] = mapped_column(ENUM(Role, name = "USER_ROLE"))
-    joined_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True))
+    joined_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.current_timestamp())
 
     #many to 1
     user: Mapped["Users"] = relationship(

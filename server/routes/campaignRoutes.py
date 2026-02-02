@@ -1,28 +1,39 @@
 from flask import request, jsonify, Flask, Blueprint
-import requests
 from flask_jwt_extended import jwt_required
 from services.campaignService import CampaignService
 from services.util import ServiceError
 
-campaigns_bp = Blueprint("campaigns", __name__, "/campaigns/v1/")
+campaigns_bp = Blueprint("campaigns", __name__, "/v1/campaigns/")
 #Lets try a different method. This endpoint will group operations together, 
 
 
 #we can't group operations that require url parameters, also this makes it less readable
-@jwt_required
 @campaigns_bp.route("/")
+@jwt_required()
 def get_user_campaigns():
     #get all campaings for that user
     #call user service, then use the JWT to get user id.
     #get campaigns using campaigns member associatation. 
-    pass
-
-@jwt_required
-@campaigns_bp.route("/", methods=["POST"])
+    try:
+        service = CampaignService()
+        campaigns = service.get_campaigns()
+        return jsonify({"campaign_data": campaigns})
+    except ServiceError as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 400
+    except Exception as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 500
+    
+@campaigns_bp.route("/create", methods=["POST"])
+@jwt_required()
 def create_campaign():
+    #users creating are auto role 'DM'
     try:
         #form info - title, description
-        data = request.form
+        data = request.get_json()
         service = CampaignService()
         campaign = service.create_new_campaign(data)
         return jsonify({"campaign_data": campaign}), 200
@@ -35,11 +46,31 @@ def create_campaign():
             "ERROR":str(e)
             }), 500
 
-@jwt_required
+
+
+@campaigns_bp.route("/enroll/<uuid:campaign_id>", methods=["POST"])
+@jwt_required()
+def join_campaign(campaign_id):
+    #users joining are auto role 'player', Creator can copy paste campaign_id (like an invite code)
+    try:
+        service = CampaignService()
+        service.enroll_user(campaign_id)
+        return jsonify({"campaign_data": "Succesfully Enrolled"}), 200
+    except ServiceError as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 400
+    except Exception as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 500
+
+
 @campaigns_bp.route("/<uuid:campaign_id>", methods=["PUT"])
+@jwt_required()
 def update_campaign(campaign_id):
     try:
-        data = request.form
+        data = request.get_json()
         service = CampaignService()
         updated_campaign = service.update_existing_campaign(data, campaign_id)
         return jsonify({"campaign_data":updated_campaign})
@@ -53,15 +84,16 @@ def update_campaign(campaign_id):
             }), 500
 
 
-@jwt_required
+
 @campaigns_bp.route("/<uuid:campaign_id>", methods=["DELETE"])
+@jwt_required()
 def delete_campaign(campaign_id):
     try:
         service = CampaignService()
         removed_campaign = service.delete_existing_campaign(campaign_id)
         return jsonify({"campaign_data": removed_campaign})
     except ServiceError as e:
-        jsonify({
+        return jsonify({
             "ERROR":str(e)
             }), 400
     except Exception as e:
@@ -69,8 +101,3 @@ def delete_campaign(campaign_id):
             "ERROR":str(e)
             }), 500
     
-
-@jwt_required
-@campaigns_bp.route("/", methods=["PUT", "POST"])
-def join_campaign():
-    pass

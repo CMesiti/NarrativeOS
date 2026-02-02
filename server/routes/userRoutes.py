@@ -4,7 +4,7 @@ from services.userService import UserService
 from services.util import ServiceError
 from flask_jwt_extended import jwt_required
 #blueprint syntax, name, where it's defined, and url_prefix, versioning 1 of bp
-users_bp = Blueprint("users", __name__, url_prefix = "/users/v1")
+users_bp = Blueprint("users", __name__, url_prefix = "/v1/users/")
 
 @users_bp.route("/")
 def get_users():
@@ -44,8 +44,8 @@ def register_user():
 
 # Protect a route with jwt_required, which will kick out requests
 # without a valid JWT present.   
-@jwt_required
 @users_bp.route("/", methods = ["PUT"])
+@jwt_required()
 def update_user():
     #form is a dictionary, current user is user id in jwt
     data = request.form
@@ -65,8 +65,9 @@ def update_user():
             {"ERROR": str(e)
              }), 500
 
-@jwt_required
+
 @users_bp.route("/", methods=["DELETE"])
+@jwt_required()
 def remove_user():
     pswd = request.form.get("password", None)
     try:

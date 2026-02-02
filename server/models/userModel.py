@@ -22,7 +22,7 @@ class Users(ModelBase):
     email: Mapped[str] = mapped_column(VARCHAR(355), unique=True, nullable=False )
     pass_hash: Mapped[str] = mapped_column(VARCHAR(200), nullable=False)
     display_name: Mapped[Optional[str]] = mapped_column(VARCHAR(50))
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default = func.current_timestamp())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default = func.current_timestamp())
 
 
     #One-to-Many Relationship (owned campaigns)

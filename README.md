@@ -1,7 +1,7 @@
 # NarrativeOS
 Dungeon Master Assistant to help guide a DM through random encounters, NPC responses, and improving player experience with unique dynamic improvised encounters.
 
-<img width="1551" height="901" alt="image" src="https://github.com/user-attachments/assets/18f13e75-6ebe-4435-ad77-4c176b0358b2" />]
+<img width="1551" height="901" alt="image" src="https://github.com/user-attachments/assets/18f13e75-6ebe-4435-ad77-4c176b0358b2" />
 
 <img width="1553" height="899" alt="image" src="https://github.com/user-attachments/assets/f6c8d0ad-c25e-4102-90b6-37c63ba5adb6" />
 

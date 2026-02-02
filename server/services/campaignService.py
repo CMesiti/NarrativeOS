@@ -1,4 +1,5 @@
-from models import Campaigns, campaign_to_dict
+from models import Campaigns, CampaignMembers,campaign_to_dict
+from sqlalchemy import select
 from services.util import ServiceError
 from config.db import db #import db variable
 from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
@@ -7,10 +8,14 @@ from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 class CampaignService():
 
     def get_campaigns():
-        pass
+        if verify_jwt_in_request():
+            current_user = get_jwt_identity()
+        else:
+            raise ServiceError("Unauthorized Access")
+        stmt = select(CampaignMembers)
     
     
-    def register_new_campaign(self, campaign_data):
+    def create_new_campaign(self, campaign_data):
         title = campaign_data.get("title", None)
         description = campaign_data.get("description", None) #not required
         if not title:
@@ -58,5 +63,5 @@ class CampaignService():
             raise ServiceError("Unauthorized Access")
         db.session.delete(campaign)
         db.session.commit()
-
+        return [campaign_to_dict(campaign)]
         pass

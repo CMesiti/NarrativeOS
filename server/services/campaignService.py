@@ -50,7 +50,7 @@ class CampaignService():
         campaign_member = CampaignMembers(
             campaign_id = campaign_id,
             user_id = current_user,
-            user_role = "Player"
+            user_role = "PLAYER"
         )
         db.session.add(campaign_member)
         db.session.commit()
@@ -75,9 +75,10 @@ class CampaignService():
         #verify that the user deleting is created by
         current_user = get_jwt_identity()
         campaign = db.session.get(Campaigns, campaign_id)
+        print(type(current_user), type(campaign.created_by))
         if not campaign:
             raise ServiceError("Invalid Campaign ID")
-        if campaign.created_by != current_user:
+        if str(campaign.created_by) != current_user:
             raise ServiceError("Unauthorized Access")
         db.session.delete(campaign)
         db.session.commit()

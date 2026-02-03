@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from models import Campaigns, Users
 class Role(enum.Enum):
     DM = "DM"
-    PLAYER = "Player"
+    PLAYER = "PLAYER"
     VIEWER = "VIEWER"
 
 #classic many to many association table

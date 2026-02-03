@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from services.campaignService import CampaignService
 from services.util import ServiceError
 
-campaigns_bp = Blueprint("campaigns", __name__, "/v1/campaigns/")
+campaigns_bp = Blueprint("campaigns", __name__, url_prefix="/v1/campaigns/")
 #Lets try a different method. This endpoint will group operations together, 
 
 

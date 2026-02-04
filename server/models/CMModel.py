@@ -1,5 +1,5 @@
 from sqlalchemy.dialects.postgresql import  UUID, ENUM, TIMESTAMP
-from models import ModelBase
+from server.models import ModelBase
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy import ForeignKey, func
 from datetime import datetime
@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from models import Campaigns, Users
 
-    
+
 class Role(enum.Enum):
     DM = "DM"
     Player = "Player"

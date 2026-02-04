@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
-from models import Users
-from services.userService import UserService
-from services.util import ServiceError
+from server.services.userService import UserService
+from server.services.util import ServiceError
 from flask_jwt_extended import jwt_required
 #blueprint syntax, name, where it's defined, and url_prefix, versioning 1 of bp
 users_bp = Blueprint("users", __name__, url_prefix = "/v1/users/")

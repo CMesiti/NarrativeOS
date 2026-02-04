@@ -1,7 +1,7 @@
-from models import Campaigns, CampaignMembers, campaign_to_dict
+from server.models import Campaigns, CampaignMembers, campaign_to_dict
 from sqlalchemy import select
-from services.util import ServiceError
-from config.db import db #import db variable
+from server.services.util import ServiceError
+from server.config.db import db #import db variable
 from flask_jwt_extended import get_jwt_identity
 
 

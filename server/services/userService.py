@@ -1,9 +1,9 @@
 from sqlalchemy import text, select, update, delete, insert
-from config.db import db
+from server.config.db import db
 from sqlalchemy.orm import selectinload
-from models import Users, user_to_dict
-from services.util import hash_pass, check_pass, ServiceError
-from flask_jwt_extended import get_jwt_identity,verify_jwt_in_request
+from server.models import Users, user_to_dict
+from server.services.util import hash_pass, check_pass, ServiceError
+from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
 
 #db.session is our session obj, 
 # Calling the Session.scalars() method is the equivalent to calling upon 

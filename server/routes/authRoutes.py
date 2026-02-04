@@ -1,7 +1,7 @@
 from flask import Flask, Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token
-from services.userService import UserService
-from services.util import ServiceError
+from server.services.userService import UserService
+from server.services.util import ServiceError
 #Main ways for session authenticaiton:
 #https://medium.com/@shubhamnalawade037/oauth2-vs-jwt-vs-sessions-developers-choose-wrong-3ff451375b43
 

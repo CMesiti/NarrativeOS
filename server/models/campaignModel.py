@@ -2,7 +2,7 @@ from sqlalchemy import  ForeignKey, VARCHAR, text, func
 from sqlalchemy.dialects.postgresql import UUID, TEXT, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List, Optional
-from models import ModelBase
+from server.models import ModelBase
 from datetime import datetime
 import uuid
 from typing import TYPE_CHECKING

@@ -1,7 +1,7 @@
 from sqlalchemy.dialects.postgresql import  UUID, ENUM, TIMESTAMP
-from models import ModelBase
+from server.models import ModelBase
 from sqlalchemy.orm import mapped_column, Mapped, relationship
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, func
 from datetime import datetime
 import uuid
 import enum
@@ -9,10 +9,12 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from models import Campaigns, Users
+
+
 class Role(enum.Enum):
     DM = "DM"
-    PLAYER = "Player"
-    VIEWER = "VIEWER"
+    Player = "Player"
+    Viewer = "Viewer"
 
 #classic many to many association table
 class CampaignMembers(ModelBase):
@@ -21,8 +23,8 @@ class CampaignMembers(ModelBase):
     #declare table columns, dtypes, and mappings
     campaign_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), primary_key=True)
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), primary_key = True)
-    user_role: Mapped[Role] = mapped_column(ENUM(Role, name = "USER_ROLE"))
-    joined_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True))
+    user_role: Mapped[Role] = mapped_column(ENUM(Role, name = "user_role"))
+    joined_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.current_timestamp())
 
     #many to 1
     user: Mapped["Users"] = relationship(

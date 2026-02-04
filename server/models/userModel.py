@@ -2,7 +2,7 @@ from sqlalchemy import VARCHAR, text, func
 from sqlalchemy.dialects.postgresql import UUID, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List, Optional
-from models import ModelBase, campaign_to_dict
+from server.models import ModelBase, campaign_to_dict
 from datetime import datetime
 import uuid
 from typing import TYPE_CHECKING
@@ -22,14 +22,14 @@ class Users(ModelBase):
     email: Mapped[str] = mapped_column(VARCHAR(355), unique=True, nullable=False )
     pass_hash: Mapped[str] = mapped_column(VARCHAR(200), nullable=False)
     display_name: Mapped[Optional[str]] = mapped_column(VARCHAR(50))
-    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default = func.current_timestamp())
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default = func.current_timestamp())
 
 
-    #One-to-Many Relationship
+    #One-to-Many Relationship (owned campaigns)
     campaigns:Mapped[List["Campaigns"]] = relationship(
         "Campaigns",
          back_populates = "user")
-    #association relationship
+    #association relationship 
     campaign_members:Mapped[List["CampaignMembers"]] = relationship(
         "CampaignMembers", 
         back_populates="user",
@@ -52,8 +52,8 @@ def user_to_dict(user:Users)->dict:
             "email":user.email, 
             "display_name":user.display_name, 
             "created_at": user.created_at,
-            "pass_hash": user.pass_hash,
-            "campaigns": [campaign_to_dict(campaign) for campaign in user.campaigns]}
+            # "campaigns": [campaign_to_dict(member) for member in user.campaigns]}
+            "campaigns": [campaign_to_dict(member.campaign) for member in user.campaign_members]}
 
 
 

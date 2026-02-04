@@ -2,12 +2,12 @@ from sqlalchemy import  ForeignKey, VARCHAR, text, func
 from sqlalchemy.dialects.postgresql import UUID, TEXT, TIMESTAMP
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List, Optional
-from models import ModelBase
+from server.models import ModelBase
 from datetime import datetime
 import uuid
 from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
+if TYPE_CHECKING: #avoid circular imports
     from models import CampaignMembers, PlayerCharacters
 #ADD UNIQUE CONTRAINT TO CAMPAIGN TITLES
 #models follow tables under DBQueries docs, refer SQLalchemy ORM documentation
@@ -18,7 +18,7 @@ class Campaigns(ModelBase):
 
     #mapped column function provides extra constraints and information about the field relating to the DDL
     campaign_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),primary_key= True,server_default=text("gen_random_uuid()"))
-    title: Mapped[str] = mapped_column(VARCHAR(100),nullable=False)
+    title: Mapped[str] = mapped_column(VARCHAR(100),unique=True, nullable=False)
     description: Mapped[Optional[str]] = mapped_column(TEXT)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.current_timestamp())
     #Foreign key constraint takes text SQL referencing another table attribute

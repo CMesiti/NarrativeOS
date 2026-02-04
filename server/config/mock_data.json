@@ -1,0 +1,157 @@
+[
+  {
+    "target_class": "models.userModel.Users",
+    "data": [
+      {
+        "email": "testuser1@example.com",
+        "pass_hash": "mypassword123$"
+      },
+      {
+        "email": "testuser2@example.com",
+        "pass_hash": "mypassword456$"
+      },
+      {
+        "email": "testuser3@example.com",
+        "pass_hash": "mypassword789$"
+      }
+    ]
+  },
+
+  {
+    "target_class": "models.campaignModel.Campaigns",
+    "data": [
+      {
+        "title": "The Great Campaign",
+        "description": "Campaign made by a random user",
+        "!refs": {
+          "created_by": {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser1@example.com" },
+            "field": "user_id"
+          }
+        }
+      },
+      {
+        "title": "Dungeon of Doom",
+        "description": "A dark dungeon crawl",
+        "!refs": {
+          "created_by": {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser2@example.com" },
+            "field": "user_id"
+          }
+        }
+      }
+    ]
+  },
+
+  {
+    "target_class": "models.CMModel.CampaignMembers",
+    "data": [
+      {
+        "user_role": "DM",
+        "!refs": [
+          {
+            "target_class": "models.campaignModel.Campaigns",
+            "criteria": { "title": "The Great Campaign" },
+            "field": "campaign_id"
+          },
+          {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser1@example.com" },
+            "field": "user_id"
+          }
+        ]
+      },
+      {
+        "user_role": "Player",
+        "!refs": [
+          {
+            "target_class": "models.campaignModel.Campaigns",
+            "criteria": { "title": "The Great Campaign" },
+            "field": "campaign_id"
+          },
+          {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser2@example.com" },
+            "field": "user_id"
+          }
+        ]
+      },
+      {
+        "user_role": "DM",
+        "!refs": [
+          {
+            "target_class": "models.campaignModel.Campaigns",
+            "criteria": { "title": "Dungeon of Doom" },
+            "field": "campaign_id"
+          },
+          {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser2@example.com" },
+            "field": "user_id"
+          }
+        ]
+      },
+      {
+        "user_role": "Player",
+        "!refs": [
+          {
+            "target_class": "models.campaignModel.Campaigns",
+            "criteria": { "title": "Dungeon of Doom" },
+            "field": "campaign_id"
+          },
+          {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser3@example.com" },
+            "field": "user_id"
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    "target_class": "models.PCModel.PlayerCharacters",
+    "data": [
+      {
+        "character_name": "Thorin",
+        "character_class": { "fighter": 5 },
+        "character_stats": { "int": 10, "dex": 12, "con": 16, "wis": 8, "str": 18, "chr": 10 },
+        "character_level": 5,
+        "character_hitpoints": 52,
+        "!refs": [
+          {
+            "target_class": "models.campaignModel.Campaigns",
+            "criteria": { "title": "The Great Campaign" },
+            "field": "campaign_id"
+          },
+          {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser2@example.com" },
+            "field": "user_id"
+          }
+        ]
+      },
+      {
+        "character_name": "Elira",
+        "character_class": { "cleric": 6 },
+        "character_stats": { "int": 14, "dex": 10, "con": 12, "wis": 17, "str": 10, "chr": 13 },
+        "character_level": 6,
+        "character_hitpoints": 48,
+        "!refs": [
+          {
+            "target_class": "models.campaignModel.Campaigns",
+            "criteria": { "title": "Dungeon of Doom" },
+            "field": "campaign_id"
+          },
+          {
+            "target_class": "models.userModel.Users",
+            "criteria": { "email": "testuser3@example.com" },
+            "field": "user_id"
+          }
+        ]
+      }
+    ]
+  }
+]

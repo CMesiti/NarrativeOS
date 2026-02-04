@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 from flask import current_app
 from flask_sqlalchemy import SQLAlchemy
-from models import ModelBase
+from server.models import ModelBase
 
 #gives access to db.Models and db.Sessions
 db = SQLAlchemy(model_class = ModelBase)

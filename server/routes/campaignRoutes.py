@@ -83,6 +83,17 @@ def update_campaign(campaign_id):
             "ERROR":str(e)
             }), 500
 
+@campaigns_bp.route("/<uuid:campaign_id>/<uuid:user_id>")
+@jwt_required()
+def campaign_remove_user(campaign_id, user_id):
+    try:
+        service = CampaignService()
+        service.remove_user
+        return jsonify({"campaign_data": "Succesfully Removed User"})
+    except ServiceError as e:
+        pass
+    except Exception as e:
+        pass
 
 
 @campaigns_bp.route("/<uuid:campaign_id>", methods=["DELETE"])

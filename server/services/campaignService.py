@@ -54,6 +54,19 @@ class CampaignService():
         )
         db.session.add(campaign_member)
         db.session.commit()
+        
+    def remove_user(self, campaign_id, user_id):
+        current_user = get_jwt_identity
+        campaign = db.session.get(Campaigns, campaign_id)
+        if not campaign:
+            raise ServiceError("Invalid Campaign ID")
+        if str(campaign.created_by) != current_user:
+            raise ServiceError("Unauthorized Access")
+        existing_member = db.session(CampaignMembers, (campaign_id, user_id))
+        if not existing_member:
+            raise ServiceError("No existing user")
+        db.session.delete(existing_member)
+        db.session.commit()
 
     def update_existing_campaign(self, updates, campaign_id):
         title = updates.get("title", None)
@@ -75,7 +88,6 @@ class CampaignService():
         #verify that the user deleting is created by
         current_user = get_jwt_identity()
         campaign = db.session.get(Campaigns, campaign_id)
-        print(type(current_user), type(campaign.created_by))
         if not campaign:
             raise ServiceError("Invalid Campaign ID")
         if str(campaign.created_by) != current_user:

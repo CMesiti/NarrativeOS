@@ -1,5 +1,5 @@
 # NarrativeOS
-Dungeon Master Assistant to help guide a DM through random encounters, NPC responses, and improving player experience with unique dynamic improvised encounters.
+RAG powered TTRPG Assistive Web Application. Need help working through player actions, improvising encounters, balancing random events, or keeping track of campaign notes and details? NarrativeOS supports DMs and players to easily improvise actions and encounters. Upload your notes for a RAG agent chat interface allowing for meaningful responses, related events, DM support, ruleset information and balanced encounters.
 
 <img width="1551" height="901" alt="image" src="https://github.com/user-attachments/assets/18f13e75-6ebe-4435-ad77-4c176b0358b2" />
 

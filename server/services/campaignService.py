@@ -50,7 +50,7 @@ class CampaignService():
         campaign_member = CampaignMembers(
             campaign_id = campaign_id,
             user_id = current_user,
-            user_role = "PLAYER"
+            user_role = "Player"
         )
         db.session.add(campaign_member)
         db.session.commit()

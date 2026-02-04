@@ -11,8 +11,8 @@ if TYPE_CHECKING:
     from models import Campaigns, Users
 class Role(enum.Enum):
     DM = "DM"
-    PLAYER = "PLAYER"
-    VIEWER = "VIEWER"
+    Player = "Player"
+    Viewer = "Viewer"
 
 #classic many to many association table
 class CampaignMembers(ModelBase):
@@ -21,7 +21,7 @@ class CampaignMembers(ModelBase):
     #declare table columns, dtypes, and mappings
     campaign_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), primary_key=True)
     user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), primary_key = True)
-    user_role: Mapped[Role] = mapped_column(ENUM(Role, name = "USER_ROLE"))
+    user_role: Mapped[Role] = mapped_column(ENUM(Role, name = "user_role"))
     joined_at: Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.current_timestamp())
 
     #many to 1

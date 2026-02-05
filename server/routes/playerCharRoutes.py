@@ -1,5 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
+from server.services.util import ServiceError
 
 
 pc_bp = Blueprint("pc_bp", __name__, url_prefix="/v1/player-character/")
@@ -9,7 +10,12 @@ pc_bp = Blueprint("pc_bp", __name__, url_prefix="/v1/player-character/")
 @pc_bp.route("/<uuid:campaign_id>")
 @jwt_required()
 def get_player_characters(campaign_id):
-    pass
+    try:
+        player_data = request.get_json()
+    except ServiceError() as e:
+        pass
+    except Exception as e:
+        pass
 
 
 @pc_bp.route("/<uuid:campaign_id>", methods=["POST"])

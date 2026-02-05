@@ -11,9 +11,7 @@ class CampaignService():
         current_user = get_jwt_identity()
         stmt = select(CampaignMembers).where(CampaignMembers.user_id == current_user)
         campaign_members = db.session.scalars(stmt).all()
-        user_campaigns = [
-            campaign_to_dict(cm.campaign) for cm in campaign_members
-        ]
+        user_campaigns = [campaign_to_dict(cm.campaign) for cm in campaign_members]
         return user_campaigns
         
     def create_new_campaign(self, campaign_data):

@@ -1,27 +1,44 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required
 from server.services.util import ServiceError
-
+from server.services.playerCharService import PlayerService
 
 pc_bp = Blueprint("pc_bp", __name__, url_prefix="/v1/player-character/")
 
 #each player character action is related to a specific campaign
 
 @pc_bp.route("/<uuid:campaign_id>")
-@jwt_required()
 def get_player_characters(campaign_id):
     try:
-        player_data = request.get_json()
+        service = PlayerService()
+        campaign_players = service.get_campaign_players(campaign_id)
+        return jsonify({"player_data": campaign_players}), 200
     except ServiceError() as e:
-        pass
+        return jsonify({
+            "ERROR":str(e)
+            }), 400
     except Exception as e:
-        pass
+        return jsonify({
+            "ERROR":str(e)
+            }), 500
 
 
 @pc_bp.route("/<uuid:campaign_id>", methods=["POST"])
 @jwt_required()
 def create_player_character(campaign_id):
-    pass
+    try:
+        player_data = request.get_json()
+        service = PlayerService()
+        player = service.create_new_player(player_data, campaign_id)
+        return jsonify({"player_data":player}), 200
+    except ServiceError() as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 400
+    except Exception as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 500
     
 
 @pc_bp.route("/<uuid:campaign_id>", methods=["PUT"])

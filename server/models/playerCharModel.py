@@ -51,4 +51,10 @@ class PlayerCharacters(ModelBase):
                 """
 
 def pc_to_dict(pc:PlayerCharacters):
-    pass
+    return {"user":pc.user.display_name,
+            "character": pc.character_name,
+            "classes": pc.character_class,
+            "stats": pc.character_stats,
+            "level": pc.character_level,
+            "hitpoints":pc.character_hitpoints,
+            "created_at":pc.created_at}

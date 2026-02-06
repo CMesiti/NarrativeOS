@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from server.services.util import ServiceError
 from server.services.playerCharService import PlayerService
 
-pc_bp = Blueprint("pc_bp", __name__, url_prefix="/v1/player-character/")
+pc_bp = Blueprint("pc_bp", __name__, url_prefix="/v1/player-characters/")
 
 #each player character action is related to a specific campaign
 

@@ -1,7 +1,7 @@
 from server.config.db import db
 from server.services.util import ServiceError
 from flask_jwt_extended import get_jwt_identity
-from sqlalchemy import select
+from sqlalchemy import select, update
 from server.models.playerCharModel import PlayerCharacters, pc_to_dict
 
 class PlayerService:
@@ -39,3 +39,33 @@ class PlayerService:
         db.session.add(new_player)
         db.session.commit()
         return pc_to_dict(new_player)
+    
+    def update_existing_player(self, updates,character_id):
+        #check for existing character
+        #limit updates to specific fields
+        allowed_fields = {"character_name", 
+                          "character_level", 
+                          "character_class", 
+                          "character_stats", 
+                          "character_hitpoints"}
+        for k in updates.keys():
+            if k not in allowed_fields:
+                raise ServiceError(f"Invalid Update request: {k}")
+        existing_player = db.session.get(PlayerCharacters, character_id)
+        if not existing_player:
+            raise ServiceError("Invalid Character")
+        if not updates:
+            raise ServiceError("No Update Arguments")
+        for key, val in updates.items(): #must ensure request schema
+            setattr(existing_player, key, val)
+        db.session.commit()
+        return pc_to_dict(existing_player)
+    
+    def delete_existing_player(self, character_id):
+        existing_player = db.session.get(PlayerCharacters, character_id)
+        if not existing_player:
+            raise ServiceError("Invalid Character")
+        db.session.delete(existing_player)
+        db.session.commit()
+        return pc_to_dict(existing_player)
+

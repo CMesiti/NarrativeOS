@@ -30,7 +30,7 @@ def create_player_character(campaign_id):
         player_data = request.get_json()
         service = PlayerService()
         player = service.create_new_player(player_data, campaign_id)
-        return jsonify({"player_data":player}), 200
+        return jsonify({"player_data":player}), 201
     except ServiceError() as e:
         return jsonify({
             "ERROR":str(e)
@@ -41,17 +41,40 @@ def create_player_character(campaign_id):
             }), 500
     
 
-@pc_bp.route("/<uuid:campaign_id>", methods=["PUT"])
+@pc_bp.route("/<uuid:character_id>", methods=["PUT"])
 @jwt_required()
-def update_player_character(campaign_id):
-    pass
+def update_player_character(character_id):
+    try:
+        updates = request.get_json()
+        service = PlayerService()
+        player = service.update_existing_player(updates, character_id)
+        return jsonify({"player_data":player}), 202
+    except ServiceError() as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 400
+    except Exception as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 500
+    
 
 
-@pc_bp.route("/<uuid:campaign_id>", methods=["DELETE"])
+@pc_bp.route("/<uuid:character_id>", methods=["DELETE"])
 @jwt_required()
-def delete_player_character(campaign_id):
-    pass
-
+def delete_player_character(character_id):
+    try:
+        service = PlayerService()
+        player = service.delete_existing_player(character_id)
+        return jsonify({"player_data":player}), 202
+    except ServiceError() as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 400
+    except Exception as e:
+        return jsonify({
+            "ERROR":str(e)
+            }), 500
 
 
 #create, update, get, and delete player characters

@@ -48,7 +48,7 @@ def update_user():
         print(data)
         service = UserService()
         user_updated = service.update_existing_user(data)
-        return jsonify({"user_data": user_updated}), 202
+        return jsonify({"user_data": user_updated}), 200
     except ServiceError as e:
         return jsonify(
             {"ERROR": str(e)
@@ -67,7 +67,7 @@ def remove_user():
         pswd = data.get(pswd, None)
         service = UserService()
         user_deleted = service.remove_existing_user(pswd)
-        return jsonify({"user_data": user_deleted}), 202
+        return jsonify({"user_data": user_deleted}), 204
     except ServiceError as e:
         return jsonify(
             {"ERROR": str(e)

@@ -48,7 +48,7 @@ def update_player_character(character_id):
         updates = request.get_json()
         service = PlayerService()
         player = service.update_existing_player(updates, character_id)
-        return jsonify({"player_data":player}), 202
+        return jsonify({"player_data":player}), 200
     except ServiceError() as e:
         return jsonify({
             "ERROR":str(e)
@@ -66,7 +66,7 @@ def delete_player_character(character_id):
     try:
         service = PlayerService()
         player = service.delete_existing_player(character_id)
-        return jsonify({"player_data":player}), 202
+        return jsonify({"player_data":player}), 204
     except ServiceError() as e:
         return jsonify({
             "ERROR":str(e)

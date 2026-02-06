@@ -43,6 +43,7 @@ class PlayerService:
     def update_existing_player(self, updates,character_id):
         #check for existing character
         #limit updates to specific fields
+        current_user = get_jwt_identity()
         allowed_fields = {"character_name", 
                           "character_level", 
                           "character_class", 
@@ -54,6 +55,8 @@ class PlayerService:
         existing_player = db.session.get(PlayerCharacters, character_id)
         if not existing_player:
             raise ServiceError("Invalid Character")
+        if str(existing_player.user_id) != current_user:
+            raise ServiceError("Unauthorized Access")
         if not updates:
             raise ServiceError("No Update Arguments")
         for key, val in updates.items(): #must ensure request schema
@@ -62,9 +65,12 @@ class PlayerService:
         return pc_to_dict(existing_player)
     
     def delete_existing_player(self, character_id):
+        current_user = get_jwt_identity()
         existing_player = db.session.get(PlayerCharacters, character_id)
         if not existing_player:
             raise ServiceError("Invalid Character")
+        if str(existing_player.user_id) != current_user:
+            raise ServiceError("Unauthorized Access")
         db.session.delete(existing_player)
         db.session.commit()
         return pc_to_dict(existing_player)

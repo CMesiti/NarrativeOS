@@ -1,7 +1,7 @@
 from server.config.db import init_db
 from flask import Flask, jsonify
 from flask_cors import CORS
-from server.routes import userRoutes, campaignRoutes, authRoutes
+from server.routes import userRoutes, campaignRoutes, authRoutes,playerCharRoutes
 from flask_jwt_extended import JWTManager
 from dotenv import load_dotenv
 import os
@@ -18,6 +18,7 @@ def create_app(test_config = None):
     app.register_blueprint(userRoutes.users_bp)
     app.register_blueprint(campaignRoutes.campaigns_bp)
     app.register_blueprint(authRoutes.auth_bp)
+    app.register_blueprint(playerCharRoutes.pc_bp)
     return app
 app = create_app()
 @app.route("/status")

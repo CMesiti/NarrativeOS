@@ -64,7 +64,7 @@ class UserService:
         db.session.add(newUser)
         db.session.commit()
         #after flush we assign server defaults to obj
-        created_user = [user_to_dict(newUser)]
+        created_user = user_to_dict(newUser)
         return created_user
     
     def update_existing_user(self, updates):
@@ -92,7 +92,7 @@ class UserService:
             user = db.session.get(Users, current_user)
             user.display_name = display_name
             db.session.commit()
-            return [user_to_dict(user)]
+            return user_to_dict(user)
         else:
             raise ServiceError("Missing Update Information")
         
@@ -106,4 +106,4 @@ class UserService:
             raise ServiceError(f"Validation Error {e}")
         db.session.delete(user)
         db.session.commit()
-        return [user_to_dict(user)]
+        return user_to_dict(user)

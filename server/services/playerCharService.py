@@ -19,11 +19,11 @@ class PlayerService:
         classes = player_data.get("character_class", None)
         stats = player_data.get("character_stats", None)
         hitpoints = player_data.get("character_hitpoints", None)
-        if not all(name, level, classes, stats, hitpoints):
+        if not all([name, level, classes, stats, hitpoints]):
             raise ServiceError("Missing required player fields.")
         current_user = get_jwt_identity()
         #check if already exists
-        stmt = select(PlayerCharacters).where(PlayerCharacters.name == name)
+        stmt = select(PlayerCharacters).where(PlayerCharacters.character_name == name)
         existing_player = db.session.scalars(stmt).first()
         if existing_player:
             raise ServiceError("Already Existing Character")

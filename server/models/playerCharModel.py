@@ -51,7 +51,8 @@ class PlayerCharacters(ModelBase):
                 """
 
 def pc_to_dict(pc:PlayerCharacters):
-    return {"user":pc.user.display_name,
+    return {"character_id":pc.character_id,
+            "user":pc.user.display_name,
             "character": pc.character_name,
             "classes": pc.character_class,
             "stats": pc.character_stats,

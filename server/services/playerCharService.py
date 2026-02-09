@@ -4,6 +4,7 @@ from flask_jwt_extended import get_jwt_identity
 from sqlalchemy import select, update
 from server.models.playerCharModel import PlayerCharacters, pc_to_dict
 
+#**ADD jwt verification, only user_ids enrolled in the requested campaign can perform these actions.***
 class PlayerService:
     #get all player characters under a specific campaign
     def get_campaign_players(self, campaign_id):

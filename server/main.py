@@ -11,7 +11,7 @@ def create_app(test_config = None):
     app = Flask(__name__, instance_relative_config=True)
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")
     jwt = JWTManager(app)
-    CORS(app)
+    CORS(app) #security for requests
     #Since we use the g object we enable access to current app in configuration.
     with app.app_context():
         init_db(app)
@@ -20,6 +20,8 @@ def create_app(test_config = None):
     app.register_blueprint(authRoutes.auth_bp)
     app.register_blueprint(playerCharRoutes.pc_bp)
     return app
+
+
 app = create_app()
 @app.route("/status")
 def check_status():

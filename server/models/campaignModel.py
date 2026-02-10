@@ -8,7 +8,7 @@ import uuid
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING: #avoid circular imports
-    from models import CampaignMembers, PlayerCharacters
+    from models import CampaignMembers, PlayerCharacters, Users
 #ADD UNIQUE CONTRAINT TO CAMPAIGN TITLES
 #models follow tables under DBQueries docs, refer SQLalchemy ORM documentation
 class Campaigns(ModelBase):
@@ -27,7 +27,7 @@ class Campaigns(ModelBase):
 
 
     #Many-to-One Relationship, 1 user can have many campaigns
-    user = relationship(
+    user:Mapped["Users"] = relationship(
         "Users", 
         back_populates="campaigns")
     #Association Relationship
@@ -59,5 +59,6 @@ def campaign_to_dict(campaign:Campaigns)->dict:
         "title":campaign.title,
         "description":campaign.description,
         "created_at":campaign.created_at,
-        "created_by":campaign.created_by
+        "created_by":campaign.created_by,
+        "dm_user":campaign.user.display_name
     }

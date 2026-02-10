@@ -19,8 +19,8 @@ class PlayerCharacters(ModelBase):
     campaign_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("campaigns.campaign_id", ondelete="CASCADE"), nullable = False)
     user_id:Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True),ForeignKey("users.user_id", ondelete="CASCADE"), nullable = False)
     character_name:Mapped[str] = mapped_column(VARCHAR(50), nullable = False)
-    character_class:Mapped[dict] = mapped_column(JSONB)
-    character_stats:Mapped[dict] = mapped_column(JSONB)
+    character_class:Mapped[dict] = mapped_column(JSONB) #fixed keys json w/ levels for each class
+    character_stats:Mapped[dict] = mapped_column(JSONB) #fixed keys json w/ values for each stat
     character_level:Mapped[int] = mapped_column(INTEGER)
     character_hitpoints:Mapped[int] = mapped_column(INTEGER)
     created_at:Mapped[datetime] = mapped_column(TIMESTAMP(timezone=True), server_default=func.current_timestamp())
@@ -37,7 +37,7 @@ class PlayerCharacters(ModelBase):
          back_populates="player_characters",
          passive_deletes=True)
 
-
+    #for logging
     def __repr__(self):
         return f"""
                 character_id - {self.character_id}
@@ -49,10 +49,12 @@ class PlayerCharacters(ModelBase):
                 character_hitpoints - {self.character_hitpoints}
                 created_at - {self.created_at}
                 """
-
+#return data package
 def pc_to_dict(pc:PlayerCharacters):
     return {"character_id":pc.character_id,
             "user":pc.user.display_name,
+            "campaign":pc.campaign.title,
+            "campaign_id":pc.campaign_id,
             "character": pc.character_name,
             "classes": pc.character_class,
             "stats": pc.character_stats,

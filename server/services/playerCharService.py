@@ -74,5 +74,5 @@ class PlayerService:
             raise ServiceError("Unauthorized Access")
         db.session.delete(existing_player)
         db.session.commit()
-        return pc_to_dict(existing_player)
+        
 

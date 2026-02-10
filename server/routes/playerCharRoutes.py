@@ -13,7 +13,7 @@ def get_player_characters(campaign_id):
         service = PlayerService()
         campaign_players = service.get_campaign_players(campaign_id)
         return jsonify({"player_data": campaign_players}), 200
-    except ServiceError() as e:
+    except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
             }), 400
@@ -31,7 +31,7 @@ def create_player_character(campaign_id):
         service = PlayerService()
         player = service.create_new_player(player_data, campaign_id)
         return jsonify({"player_data":player}), 201
-    except ServiceError() as e:
+    except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
             }), 400
@@ -49,7 +49,7 @@ def update_player_character(character_id):
         service = PlayerService()
         player = service.update_existing_player(updates, character_id)
         return jsonify({"player_data":player}), 200
-    except ServiceError() as e:
+    except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
             }), 400
@@ -65,9 +65,9 @@ def update_player_character(character_id):
 def delete_player_character(character_id):
     try:
         service = PlayerService()
-        player = service.delete_existing_player(character_id)
-        return jsonify({"player_data":player}), 204
-    except ServiceError() as e:
+        service.delete_existing_player(character_id)
+        return jsonify({"player_data": "successfully deleted"}), 204
+    except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
             }), 400

@@ -10,9 +10,7 @@ def get_users():
     try:
         service = UserService()
         user_data = service.get_user_data()
-        return jsonify({
-            "user_data": user_data
-            }), 200
+        return jsonify({"user_data": user_data}), 200
     except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
@@ -25,13 +23,11 @@ def get_users():
 
 @users_bp.route("/", methods=["POST"])
 def register_user():
-    data = request.get_json()
     try:
+        data = request.get_json()
         service = UserService()
         user_created = service.register_new_user(data)
-        return jsonify({
-            "user_data": user_created
-            }), 201
+        return jsonify({"user_data": user_created}), 201
     except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
@@ -47,14 +43,12 @@ def register_user():
 @jwt_required()
 def update_user():
     #form is a dictionary, current user is user id in jwt
-    data = request.get_json()
-    print(data)
     try:
+        data = request.get_json()
+        print(data)
         service = UserService()
         user_updated = service.update_existing_user(data)
-        return jsonify({
-            "user_data": user_updated
-            }), 200
+        return jsonify({"user_data": user_updated}), 200
     except ServiceError as e:
         return jsonify(
             {"ERROR": str(e)
@@ -68,14 +62,12 @@ def update_user():
 @users_bp.route("/", methods=["DELETE"])
 @jwt_required()
 def remove_user():
-    data = request.get_json()
-    pswd = data.get(pswd, None)
     try:
+        data = request.get_json()
+        pswd = data.get(pswd, None)
         service = UserService()
         user_deleted = service.remove_existing_user(pswd)
-        return jsonify({
-            "user_data": user_deleted
-            }), 200
+        return jsonify({"user_data": user_deleted}), 204
     except ServiceError as e:
         return jsonify(
             {"ERROR": str(e)

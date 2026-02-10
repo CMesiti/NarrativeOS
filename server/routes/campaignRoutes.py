@@ -17,7 +17,7 @@ def get_user_campaigns():
     try:
         service = CampaignService()
         campaigns = service.get_campaigns()
-        return jsonify({"campaign_data": campaigns})
+        return jsonify({"campaign_data": campaigns}), 200
     except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
@@ -36,7 +36,7 @@ def create_campaign():
         data = request.get_json()
         service = CampaignService()
         campaign = service.create_new_campaign(data)
-        return jsonify({"campaign_data": campaign}), 200
+        return jsonify({"campaign_data": campaign}), 201
     except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
@@ -55,7 +55,7 @@ def join_campaign(campaign_id):
     try:
         service = CampaignService()
         service.enroll_user(campaign_id)
-        return jsonify({"campaign_data": "Succesfully Enrolled"}), 200
+        return jsonify({"campaign_data": "Succesfully Enrolled"}), 201
     except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
@@ -73,7 +73,7 @@ def update_campaign(campaign_id):
         data = request.get_json()
         service = CampaignService()
         updated_campaign = service.update_existing_campaign(data, campaign_id)
-        return jsonify({"campaign_data":updated_campaign})
+        return jsonify({"campaign_data":updated_campaign}), 200
     except ServiceError as e:
         return jsonify({
             "ERROR":str(e)
@@ -89,11 +89,15 @@ def campaign_remove_user(campaign_id, user_id):
     try:
         service = CampaignService()
         service.remove_user
-        return jsonify({"campaign_data": "Succesfully Removed User"})
+        return jsonify({"campaign_data": "Succesfully Removed User"}), 204
     except ServiceError as e:
-        pass
+        return jsonify({
+            "ERROR":str(e)
+            }), 400
     except Exception as e:
-        pass
+        return jsonify({
+            "ERROR":str(e)
+            }), 500
 
 
 @campaigns_bp.route("/<uuid:campaign_id>", methods=["DELETE"])
@@ -102,7 +106,7 @@ def delete_campaign(campaign_id):
     try:
         service = CampaignService()
         removed_campaign = service.delete_existing_campaign(campaign_id)
-        return jsonify({"campaign_data": removed_campaign})
+        return jsonify({"campaign_data": removed_campaign}), 204
     except ServiceError as e:
         return jsonify({
             "ERROR":str(e)

@@ -4,6 +4,18 @@
 
     </head>
     <body>
-        
+        <h1>NarrativeOS Login</h1>
+        <form method="post" name="login">
+            <div>
+                <label for="email">Email</b></label>
+                <input type="text" placeholder="user@example.com" name="email" required>
+
+                <label for="password"> Password</b></label>
+                <input type="text" placeholder="Enter Password" name="password" required>
+                
+                <button type="submit" name="submit" onclick="login()">Login</button>
+            </div>
+        </form>
+        <script src="login.js"></script>
     </body>
 </html>

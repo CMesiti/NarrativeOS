@@ -64,7 +64,7 @@ def update_user():
 def remove_user():
     try:
         data = request.get_json()
-        pswd = data.get(pswd, None)
+        pswd = data.get("password", None)
         service = UserService()
         user_deleted = service.remove_existing_user(pswd)
         return jsonify({"user_data": user_deleted}), 204

@@ -24,7 +24,7 @@ def login():
     try:
         #401 errors for unauthorized
         #email and password
-        data = request.get_json
+        data = request.get_json()
         #verify user
         service = UserService()
         print(data)

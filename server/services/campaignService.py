@@ -60,7 +60,7 @@ class CampaignService():
             raise ServiceError("Invalid Campaign ID")
         if str(campaign.created_by) != current_user:
             raise ServiceError("Unauthorized Access")
-        existing_member = db.session(CampaignMembers, (campaign_id, user_id))
+        existing_member = db.session.get(CampaignMembers, (campaign_id, user_id))
         if not existing_member:
             raise ServiceError("No existing user")
         db.session.delete(existing_member)

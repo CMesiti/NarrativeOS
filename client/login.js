@@ -31,7 +31,10 @@ async function login(event){
             throw new Error(`Response status: ${response.status}`);
         }
         console.log(data.access_token);
-        localStorage.setItem(data.access_token);
+        localStorage.setItem("access_token", data.access_token);
+        window.setTimeout(function(){
+            window.location = "./campaign.html"
+        })
     }
     catch(error){
         console.error(error.message);

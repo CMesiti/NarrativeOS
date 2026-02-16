@@ -34,7 +34,7 @@ async function login(event){
         localStorage.setItem("access_token", data.access_token);
         window.setTimeout(function(){
             window.location = "./campaign.html"
-        })
+        }, 2000)
     }
     catch(error){
         console.error(error.message);

@@ -36,7 +36,7 @@ class UserService:
             raise ServiceError(f"Invalid Login")
         return user
     
-    def register_new_user(self, user_data:dict) -> list:
+    def register_new_user(self, user_data:dict):
         if "email" not in user_data:
             raise ServiceError("Missing Email")
         if "password" not in user_data:
@@ -81,6 +81,8 @@ class UserService:
             hash = hash_pass(pswd)
             #get user
             user = db.session.get(Users, current_user)
+            if not user:
+                raise ServiceError("Invalid Session")
             user.pass_hash = hash
             db.session.commit()
             return [user_to_dict(user)]
@@ -90,15 +92,18 @@ class UserService:
             elif " " in display_name:
                 raise ServiceError("No Spaces Allowed")
             user = db.session.get(Users, current_user)
-            user.display_name = display_name
-            db.session.commit()
-            return user_to_dict(user)
+            if user:
+                user.display_name = display_name
+                db.session.commit()
+                return user_to_dict(user)
         else:
             raise ServiceError("Missing Update Information")
         
     def remove_existing_user(self, pswd):
         current_user = get_jwt_identity()
         user = db.session.get(Users, current_user)
+        if not user:
+            raise ServiceError("Invalid Session")
         if not pswd:
            raise ServiceError("Password Required")
         is_valid, e = check_pass(pswd, user.pass_hash)

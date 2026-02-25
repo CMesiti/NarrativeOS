@@ -24,9 +24,10 @@ def login():
     try:
         #401 errors for unauthorized
         #email and password
-        data = request.form
+        data = request.get_json()
         #verify user
         service = UserService()
+        print(data)
         user = service.login_user(data)
         print(f"Logging user id {type(user.user_id), user.user_id}")
         #add additional info to JWT with add additional claims arg in create function
